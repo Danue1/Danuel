@@ -1,4 +1,4 @@
-use crate::{Builder, Named};
+use crate::{Build, Named};
 
 #[derive(Debug)]
 pub enum MobError {
@@ -37,7 +37,7 @@ pub struct MobBuilder {
     description: Option<String>,
 }
 
-impl Builder for MobBuilder {
+impl Build for MobBuilder {
     type Target = Mob;
     type Error = MobError;
 

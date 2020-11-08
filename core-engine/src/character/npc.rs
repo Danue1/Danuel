@@ -1,4 +1,4 @@
-use crate::{Builder, Named};
+use crate::{Build, Named};
 
 #[derive(Debug)]
 pub enum NpcError {
@@ -21,7 +21,7 @@ pub struct NpcBuilder {
     name: Option<String>,
 }
 
-impl Builder for NpcBuilder {
+impl Build for NpcBuilder {
     type Target = Npc;
     type Error = NpcError;
 

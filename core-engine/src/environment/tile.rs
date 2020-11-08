@@ -1,19 +1,21 @@
-#[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
-pub struct TileId(u32);
+use crate::Id;
 
-impl From<u32> for TileId {
-    fn from(id: u32) -> Self {
+#[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
+pub struct TileId(Id);
+
+impl From<Id> for TileId {
+    fn from(id: Id) -> Self {
         TileId(id)
     }
 }
 
-impl From<TileId> for u32 {
+impl From<TileId> for Id {
     fn from(id: TileId) -> Self {
         id.0
     }
 }
 
 #[derive(Clone, Serialize, Deserialize)]
-pub struct Tile<Image> {
+pub struct Tile<Image: Default> {
     image: Image,
 }

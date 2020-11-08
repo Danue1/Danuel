@@ -1,15 +1,15 @@
-use crate::{Mob, Named, Npc, Player};
+use crate::{Id, Mob, Named, Npc, Player};
 
 #[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
-pub struct CharacterId(u32);
+pub struct CharacterId(Id);
 
-impl From<u32> for CharacterId {
-    fn from(id: u32) -> Self {
+impl From<Id> for CharacterId {
+    fn from(id: Id) -> Self {
         CharacterId(id)
     }
 }
 
-impl From<CharacterId> for u32 {
+impl From<CharacterId> for Id {
     fn from(id: CharacterId) -> Self {
         id.0
     }

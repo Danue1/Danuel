@@ -1,4 +1,4 @@
-use crate::{CoreEngineError, ItemError, MobError, NpcError, PlayerError, WorldError};
+use crate::{CoreEngineError, ItemError, MobError, NpcError, PlayerError, StatError, WorldError};
 
 #[derive(Debug)]
 pub enum Error {
@@ -7,6 +7,7 @@ pub enum Error {
     Mob(MobError),
     Npc(NpcError),
     Player(PlayerError),
+    Stat(StatError),
     World(WorldError),
 }
 
@@ -37,6 +38,12 @@ impl From<NpcError> for Error {
 impl From<PlayerError> for Error {
     fn from(error: PlayerError) -> Self {
         Error::Player(error)
+    }
+}
+
+impl From<StatError> for Error {
+    fn from(error: StatError) -> Self {
+        Error::Stat(error)
     }
 }
 

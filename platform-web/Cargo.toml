@@ -13,11 +13,4 @@ default = ["console_error_panic_hook"]
 [dependencies]
 wasm-bindgen = { version = "0.2.63", features = ["serde-serialize"] }
 console_error_panic_hook = { version = "0.1.6", optional = true }
-wee_alloc = { version = "0.4.5", optional = true }
 core-engine = { path = "../core-engine" }
-
-[dev-dependencies]
-wasm-bindgen-test = "0.3.13"
-
-[profile.release]
-opt-level = "s"

@@ -1,13 +1,15 @@
-#[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
-pub struct FixtureId(u32);
+use crate::Id;
 
-impl From<u32> for FixtureId {
-    fn from(id: u32) -> Self {
+#[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
+pub struct FixtureId(Id);
+
+impl From<Id> for FixtureId {
+    fn from(id: Id) -> Self {
         FixtureId(id)
     }
 }
 
-impl From<FixtureId> for u32 {
+impl From<FixtureId> for Id {
     fn from(id: FixtureId) -> Self {
         id.0
     }

@@ -1,4 +1,4 @@
-use crate::{Builder, Error, Version, World};
+use crate::{Build, Context, Error, LifeCycle, Render, Version, World};
 
 #[derive(Debug)]
 pub enum CoreEngineError {
@@ -7,12 +7,13 @@ pub enum CoreEngineError {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct CoreEngine<Image> {
+pub struct CoreEngine<Image: Default> {
     version: Version,
     world: World<Image>,
+    context: Context,
 }
 
-impl<Image> CoreEngine<Image> {
+impl<Image: Default> CoreEngine<Image> {
     pub fn world(&self) -> &World<Image> {
         &self.world
     }
@@ -21,20 +22,25 @@ impl<Image> CoreEngine<Image> {
         &self.version
     }
 
-    pub fn run(&self) -> Result<(), Error> {
-        println!("Hello, World!");
+    pub fn run(&mut self) -> Result<LifeCycle, Error> {
+        while let LifeCycle::Continue = self.world.on_update()? {
+            if let LifeCycle::Exit = self.world.on_render(&mut self.context)? {
+                break;
+            }
+        }
 
-        Ok(())
+        Ok(LifeCycle::Exit)
     }
 }
 
 #[derive(Default)]
-pub struct CoreEngineBuilder<Image> {
-    version: Option<Version>,
+pub struct CoreEngineBuilder<Image: Default> {
     world: Option<World<Image>>,
+    version: Option<Version>,
+    context: Option<Context>,
 }
 
-impl<Image: Default> Builder for CoreEngineBuilder<Image> {
+impl<Image: Default> Build for CoreEngineBuilder<Image> {
     type Target = CoreEngine<Image>;
     type Error = CoreEngineError;
 
@@ -46,11 +52,12 @@ impl<Image: Default> Builder for CoreEngineBuilder<Image> {
         Ok(CoreEngine {
             world: self.world.ok_or(CoreEngineError::UnspecifiedWorld)?,
             version: self.version.ok_or(CoreEngineError::UnspecifiedVersion)?,
+            context: self.context.unwrap_or_default(),
         })
     }
 }
 
-impl<Image> CoreEngineBuilder<Image> {
+impl<Image: Default> CoreEngineBuilder<Image> {
     pub fn world(mut self, world: World<Image>) -> Self {
         self.world = Some(world);
         self

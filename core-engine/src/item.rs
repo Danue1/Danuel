@@ -1,4 +1,19 @@
-use crate::{Builder, Named};
+use crate::{Build, Id, Named};
+
+#[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
+pub struct ItemId(Id);
+
+impl From<Id> for ItemId {
+    fn from(id: Id) -> Self {
+        ItemId(id)
+    }
+}
+
+impl From<ItemId> for Id {
+    fn from(id: ItemId) -> Self {
+        id.0
+    }
+}
 
 #[derive(Debug)]
 pub enum ItemError {
@@ -6,6 +21,7 @@ pub enum ItemError {
     UnspecifiedCount,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct Item {
     name: String,
     count: u8,
@@ -29,7 +45,7 @@ pub struct ItemBuilder {
     count: Option<u8>,
 }
 
-impl Builder for ItemBuilder {
+impl Build for ItemBuilder {
     type Target = Item;
     type Error = ItemError;
 
