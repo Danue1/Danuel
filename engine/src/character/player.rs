@@ -1,4 +1,4 @@
-use crate::{Build, ClassId, Named, Stat};
+use crate::{Build, ClassId, ItemCount, ItemId, Named, Stat};
 
 #[derive(Debug)]
 pub enum PlayerError {
@@ -9,6 +9,7 @@ pub enum PlayerError {
     UnspecifiedMana,
     UnspecifiedStamina,
     UnspecifiedStat,
+    UnspecifiedItemList,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -20,6 +21,7 @@ pub struct Player {
     mana: u32,
     stamina: u32,
     stat: Stat,
+    item_list: Vec<(ItemId, ItemCount)>,
 }
 
 impl Player {
@@ -43,6 +45,7 @@ pub struct PlayerBuilder {
     mana: Option<u32>,
     stamina: Option<u32>,
     stat: Option<Stat>,
+    item_list: Option<Vec<(ItemId, ItemCount)>>,
 }
 
 impl Build for PlayerBuilder {
@@ -62,6 +65,7 @@ impl Build for PlayerBuilder {
             mana: self.mana.ok_or(PlayerError::UnspecifiedMana)?,
             stamina: self.stamina.ok_or(PlayerError::UnspecifiedStamina)?,
             stat: self.stat.ok_or(PlayerError::UnspecifiedStat)?,
+            item_list: self.item_list.ok_or(PlayerError::UnspecifiedItemList)?,
         })
     }
 }
@@ -99,6 +103,11 @@ impl PlayerBuilder {
 
     pub fn stat(mut self, stat: Stat) -> Self {
         self.stat = Some(stat);
+        self
+    }
+
+    pub fn item_list(mut self, item_list: Vec<(ItemId, ItemCount)>) -> Self {
+        self.item_list = Some(item_list);
         self
     }
 }

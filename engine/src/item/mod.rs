@@ -1,4 +1,4 @@
-use crate::{Build, Id, Named};
+use crate::{Build, Count, Id, Named};
 
 #[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
 pub struct ItemId(Id);
@@ -15,22 +15,29 @@ impl From<ItemId> for Id {
     }
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct ItemCount(Count);
+
+impl From<Count> for ItemCount {
+    fn from(count: Count) -> Self {
+        ItemCount(count)
+    }
+}
+
+impl From<ItemCount> for Count {
+    fn from(count: ItemCount) -> Self {
+        count.0
+    }
+}
+
 #[derive(Debug)]
 pub enum ItemError {
     UnspecifiedName,
-    UnspecifiedCount,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Item {
     name: String,
-    count: u8,
-}
-
-impl Item {
-    pub fn count(&self) -> u8 {
-        self.count
-    }
 }
 
 impl Named for Item {
@@ -42,7 +49,6 @@ impl Named for Item {
 #[derive(Default)]
 pub struct ItemBuilder {
     name: Option<String>,
-    count: Option<u8>,
 }
 
 impl Build for ItemBuilder {
@@ -56,7 +62,6 @@ impl Build for ItemBuilder {
     fn build(self) -> Result<Self::Target, Self::Error> {
         Ok(Item {
             name: self.name.ok_or(ItemError::UnspecifiedName)?,
-            count: self.count.ok_or(ItemError::UnspecifiedCount)?,
         })
     }
 }
@@ -64,11 +69,6 @@ impl Build for ItemBuilder {
 impl ItemBuilder {
     pub fn name(mut self, name: String) -> Self {
         self.name = Some(name);
-        self
-    }
-
-    pub fn count(mut self, count: u8) -> Self {
-        self.count = Some(count);
         self
     }
 }

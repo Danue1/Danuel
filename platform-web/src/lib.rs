@@ -1,11 +1,11 @@
-use core_engine::{Builder, CoreEngine, CoreEngineBuilder, Version, WorldBuilder};
+use engine::{Build, CoreEngine, CoreEngineBuilder, Version, WorldBuilder};
 use wasm_bindgen::prelude::*;
 
 type Image = String;
 
 #[wasm_bindgen]
 pub fn builder() {
-    let core_engine: CoreEngine<Image> = CoreEngineBuilder::new()
+    let mut engine: CoreEngine<Image> = CoreEngineBuilder::new()
         .version(Version::new(0, 1, 0))
         .world(
             WorldBuilder::new()
@@ -17,5 +17,5 @@ pub fn builder() {
         )
         .build()
         .unwrap();
-    let _ = core_engine.run();
+    let _ = engine.run();
 }
