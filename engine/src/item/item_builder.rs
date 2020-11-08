@@ -1,9 +1,10 @@
-use crate::{Build, Item, ItemError, ItemKind};
+use crate::{Build, ClassId, Item, ItemError, ItemKind};
 
 #[derive(Default)]
 pub struct ItemBuilder {
     name: Option<String>,
     kind: Option<ItemKind>,
+    class_allow_list: Option<Vec<ClassId>>,
 }
 
 impl Build for ItemBuilder {
@@ -18,6 +19,9 @@ impl Build for ItemBuilder {
         Ok(Item {
             name: self.name.ok_or(ItemError::UnspecifiedName)?,
             kind: self.kind.ok_or(ItemError::UnspecifiedKind)?,
+            class_allow_list: self
+                .class_allow_list
+                .ok_or(ItemError::UnspecifiedClassAllowList)?,
         })
     }
 }
@@ -30,6 +34,11 @@ impl ItemBuilder {
 
     pub fn kind(mut self, kind: ItemKind) -> Self {
         self.kind = Some(kind);
+        self
+    }
+
+    pub fn class_allow_list(mut self, class_allow_list: Vec<ClassId>) -> Self {
+        self.class_allow_list = Some(class_allow_list);
         self
     }
 }

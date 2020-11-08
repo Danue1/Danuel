@@ -2,7 +2,7 @@ pub mod item_builder;
 pub mod item_id;
 pub mod item_kind;
 
-use crate::{Count, Named};
+use crate::{ClassId, Count, Named};
 pub use item_builder::*;
 pub use item_id::*;
 pub use item_kind::*;
@@ -26,17 +26,23 @@ impl From<ItemCount> for Count {
 pub enum ItemError {
     UnspecifiedName,
     UnspecifiedKind,
+    UnspecifiedClassAllowList,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Item {
     name: String,
     kind: ItemKind,
+    class_allow_list: Vec<ClassId>,
 }
 
 impl Item {
     pub fn kind(&self) -> &ItemKind {
         &self.kind
+    }
+
+    pub fn class_allow_list(&self) -> &[ClassId] {
+        self.class_allow_list.as_ref()
     }
 }
 
