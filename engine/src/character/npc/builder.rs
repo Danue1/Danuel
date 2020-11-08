@@ -1,20 +1,4 @@
-use crate::{Build, Named};
-
-#[derive(Debug)]
-pub enum NpcError {
-    UnspecifiedName,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Npc {
-    name: String,
-}
-
-impl Named for Npc {
-    fn name(&self) -> &str {
-        self.name.as_ref()
-    }
-}
+use crate::{Build, Npc, NpcError};
 
 #[derive(Default)]
 pub struct NpcBuilder {
