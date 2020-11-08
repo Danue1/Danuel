@@ -1,19 +1,11 @@
-use crate::{Build, Count, Id, Named};
+pub mod item_builder;
+pub mod item_id;
+pub mod item_kind;
 
-#[derive(Eq, PartialEq, Hash, Clone, Serialize, Deserialize)]
-pub struct ItemId(Id);
-
-impl From<Id> for ItemId {
-    fn from(id: Id) -> Self {
-        ItemId(id)
-    }
-}
-
-impl From<ItemId> for Id {
-    fn from(id: ItemId) -> Self {
-        id.0
-    }
-}
+use crate::{Count, Named};
+pub use item_builder::*;
+pub use item_id::*;
+pub use item_kind::*;
 
 #[derive(Serialize, Deserialize)]
 pub struct ItemCount(Count);
@@ -33,42 +25,23 @@ impl From<ItemCount> for Count {
 #[derive(Debug)]
 pub enum ItemError {
     UnspecifiedName,
+    UnspecifiedKind,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Item {
     name: String,
+    kind: ItemKind,
+}
+
+impl Item {
+    pub fn kind(&self) -> &ItemKind {
+        &self.kind
+    }
 }
 
 impl Named for Item {
     fn name(&self) -> &str {
         self.name.as_ref()
-    }
-}
-
-#[derive(Default)]
-pub struct ItemBuilder {
-    name: Option<String>,
-}
-
-impl Build for ItemBuilder {
-    type Target = Item;
-    type Error = ItemError;
-
-    fn new() -> Self {
-        Default::default()
-    }
-
-    fn build(self) -> Result<Self::Target, Self::Error> {
-        Ok(Item {
-            name: self.name.ok_or(ItemError::UnspecifiedName)?,
-        })
-    }
-}
-
-impl ItemBuilder {
-    pub fn name(mut self, name: String) -> Self {
-        self.name = Some(name);
-        self
     }
 }

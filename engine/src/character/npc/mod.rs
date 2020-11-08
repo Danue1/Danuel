@@ -1,7 +1,7 @@
-pub mod builder;
+pub mod npc_builder;
 
 use crate::Named;
-pub use builder::*;
+pub use npc_builder::*;
 
 #[derive(Debug)]
 pub enum NpcError {

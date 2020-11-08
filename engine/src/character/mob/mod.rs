@@ -1,7 +1,7 @@
-pub mod builder;
+pub mod mob_builder;
 
 use crate::Named;
-pub use builder::*;
+pub use mob_builder::*;
 
 #[derive(Debug)]
 pub enum MobError {

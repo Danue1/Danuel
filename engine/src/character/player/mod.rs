@@ -1,7 +1,7 @@
-pub mod builder;
+pub mod player_builder;
 
 use crate::{ClassId, ItemCount, ItemId, Named, Stat};
-pub use builder::*;
+pub use player_builder::*;
 
 #[derive(Debug)]
 pub enum PlayerError {
